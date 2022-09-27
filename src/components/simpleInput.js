@@ -7,7 +7,7 @@ const SimpleInput = () => {
         , inpBlurHdl: emailInpBlurHdl
         , resetInpFiValXTouched: resetEmInpFiStates
     } = useInput(value => value.includes('@'))
-     
+
     const {value: entPw
         , entValIsValid: pwValIsValid
         , inpFiIsWrong: pwInpFiIsWrong
@@ -15,7 +15,7 @@ const SimpleInput = () => {
         , inpBlurHdl: pwInpBlurHdl
         , resetInpFiValXTouched: resetPwInpFiStates
     } = useInput(value => value.trim() !== '')
-    
+
     let formIsValid = false;
 
     if (emailValIsValid && pwValIsValid) {
@@ -36,6 +36,8 @@ const SimpleInput = () => {
         resetEmInpFiStates();
         resetPwInpFiStates();
     }
+
+
     return (
         <form onSubmit={formSubHandler}>
             <div className={emInpClasses}>

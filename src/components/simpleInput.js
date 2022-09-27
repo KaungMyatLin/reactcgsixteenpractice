@@ -1,52 +1,70 @@
-import { useEffect, useRef, useState } from 'react'
+import useInput from '../hooks/useInputHook'
+const SimpleInput = () => {
+    const {value: entEmail
+        , entValIsValid: emailValIsValid
+        , inpFiIsWrong: emailInpFiIsWrong
+        , inpChangeHdl: emailInpChangeHdl
+        , inpBlurHdl: emailInpBlurHdl
+        , resetInpFiValXTouched: resetEmInpFiStates
+    } = useInput(value => value.includes('@'))
+     
+    const {value: entPw
+        , entValIsValid: pwValIsValid
+        , inpFiIsWrong: pwInpFiIsWrong
+        , inpChangeHdl: pwInpChangeHdl
+        , inpBlurHdl: pwInpBlurHdl
+        , resetInpFiValXTouched: resetPwInpFiStates
+    } = useInput(value => value.trim() !== '')
+    
+    let formIsValid = false;
 
-const simpleInput = (props) => {
-    const [entEmail, setEntEmail] = useState('')
-    const [entEmailIsValid, setEmailIsValid] = useState(false)
-    const [entEmailTouched, setEmailTouched] = useState(false)
-    const emInp = useRef();
+    if (emailValIsValid && pwValIsValid) {
+        formIsValid = true;
+    }
+    else {
+        formIsValid = false
+    }
 
-    useEffect( () => {
-        if (entEmailIsValid) {
-            // ! to do
-        }
-    }, [entEmailIsValid])
+    const emInpClasses = emailInpFiIsWrong ? 'form-control invalid' : 'form-control'
+    const pwInpClasses = pwInpFiIsWrong ? 'form-control invalid' : 'form-control'
+
     const formSubHandler = (e) => {
         e.preventDefault();
-        
+        if (!emailValIsValid) {
+            return
+        }
+        resetEmInpFiStates();
+        resetPwInpFiStates();
     }
-    const InvalidIsEmailInp = !entEmailIsValid && entEmailTouched;
-    const emailInpClasses = InvalidIsEmailInp ? 'form-control invalid' : 'form-control'
     return (
         <form onSubmit={formSubHandler}>
-            <div className={emailInpClasses}>
+            <div className={emInpClasses}>
                 <label htmlFor="name">Email</label>
                 <input
                 type="text"
                 id="name"
-                onChange={emailInpChangeHandler}
-                onBlur={emailInputBlurHandler}
+                onChange={emailInpChangeHdl}
+                onBlur={emailInpBlurHdl}
                 value={entEmail}
-                ref={emInp}
                 />
-                {nameInpHasError && <p className="error-text">Not empty</p>}
+                {emailInpFiIsWrong && <p className="error-text">Must includes '@'</p>}
             </div>
-            {/* <div className={emInputClasses}>
+            <div className={pwInpClasses}>
                 <label htmlFor="name">Password</label>
                 <input
                 type="text"
                 id="name"
-                onChange={pwInpChangeHandler}
-                onBlur={pwInpBlurHandler}
+                onChange={pwInpChangeHdl}
+                onBlur={pwInpBlurHdl}
                 value={entPw}
                 />
-                {emInpHasError && <p className="error-text">Not empty</p>}
+                {pwInpFiIsWrong && <p className="error-text">Must not empty</p>}
             </div>
             <div className="form-actions">
                 <button disabled={!formIsValid}>Submit</button>
-            </div> */}
+            </div>
         </form>
     )
 }
 
-export default simpleInput
+export default SimpleInput
